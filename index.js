@@ -15,6 +15,9 @@ function askForAction() {
                 "VIEW_ROLES",
                 "VIEW_EMPLOYEES",
                 "CREATE_ROLE",
+                "ADD_DEPARTMENTS",
+                "ADD_ROLES",
+                "ADD_EMPLOYEES",
                 "QUIT"
             ]
         })
@@ -23,12 +26,27 @@ function askForAction() {
             switch (res.action) {
 
                 case "VIEW_DEPARTMENTS":
+                    viewDepartments();
                     break;
 
                 case "VIEW_ROLES":
+                    viewRoles();
                     break;
 
                 case "VIEW_EMPLOYEES":
+                    viewEmployees();
+                    break;
+
+                case "ADD_DEPARTMENTS":
+                    addDepartment();
+                    break;
+    
+                case "ADD_ROLES":
+                    addRoles();
+                    break;
+    
+                case "ADD_EMPLOYEES":
+                    addEmployees();
                     break;
 
                 case "CREATE_ROLE":
@@ -76,6 +94,31 @@ function createRole() {
 
     })
 
+}
+
+function addDepartment() {
+    console.log("Department Added!");
+    askForAction();
+}
+
+function addRoles() {
+    console.log("Role Added!");
+    askForAction();
+}
+
+function addEmployees() {
+    console.log("Employee Added!");
+    askForAction();
+}
+
+function viewEmployees() {
+    console.log("Look! Employees!");
+    askForAction();
+}
+
+function viewRoles() {
+    console.log("Look! A new job!");
+    askForAction();
 }
 
 askForAction();
