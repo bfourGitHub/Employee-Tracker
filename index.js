@@ -134,8 +134,8 @@ function createRole() {
         ]).then(res => {
 
             db.insertRole(res);
-            console.log("New Role Added!");
             viewRoles();
+            console.log("New Role Added!");
             askForAction();
             
         })
@@ -146,8 +146,23 @@ function createRole() {
 }
 
 function addDepartment() {
-    console.log("Department Added!");
-    askForAction();
+    
+    inquirer.prompt([
+
+        {
+            message: "What Department would you like to add?",
+            name: "name",
+            type: "input"
+        }
+
+    ]).then(res => {
+
+        db.insertDepartment(res);
+        viewDepartments();
+        console.log("New Department Added!")
+        askForAction();
+    })
+
 }
 
 function addRoles() {
