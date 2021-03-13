@@ -114,13 +114,21 @@ function addEmployees() {
 }
 
 function viewEmployees() {
-    console.log("Look! Employees!");
-    askForAction();
+    
+    db.getEmployees().then((results) => {
+        console.table(results);
+        askForAction();
+    });
+
 }
 
 function viewRoles() {
-    console.log("Look! A new job!");
-    askForAction();
+
+    db.getRoles().then((results) => {
+        console.table(results);
+        askForAction();
+    });
+    
 }
 
 askForAction();
