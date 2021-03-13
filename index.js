@@ -53,7 +53,7 @@ function askForAction() {
                     break;
 
                 case "CREATE_DEPARTMENT":
-                    addDepartment();
+                    createDepartment();
                     break;
 
                 case "ADD_EMPLOYEES":
@@ -61,7 +61,7 @@ function askForAction() {
                     break;
 
                 case "UPDATE_ROLES":
-                    addRoles();
+                    updateRoles();
                     break;
 
                 default:
@@ -145,7 +145,7 @@ function createRole() {
 
 }
 
-function addDepartment() {
+function createDepartment() {
     
     inquirer.prompt([
 
@@ -165,13 +165,59 @@ function addDepartment() {
 
 }
 
-function addRoles() {
-    console.log("Role Added!");
-    askForAction();
-}
 
 function addEmployees() {
-    console.log("Employee Added!");
+
+    db.getRoles().then((role) => {
+
+        const roleChoices = role.map((role) => ({
+            value: role.id,
+            name: role.title
+        }))
+        
+        inquirer.prompt([
+            
+            {
+                message: "What is the new employee's FIRST NAME?",
+                name: "first_name",
+                type: "input"
+            },
+            {
+                message: "What is the new employee's LAST NAME?",
+                name: "last_name",
+                type: "input"
+            },
+            {
+                message: "What ROLE is being assigned to this employee?",
+                name: "role_id",
+                type: "list",
+                choices: roleChoices
+            },
+            {
+                message: "Which MANAGER is being assigned to this employee? (Please select the manager's ID number. Select NULL if this is a management position)",
+                name: "manager_id",
+                type: "list",
+                choices: [
+                    "1",
+                    "4",
+                    "6",
+                    "8"
+                ]
+            },
+            
+        ]).then(res => {
+            
+            db.insertEmployee(res);
+            viewEmployees();
+            console.log("New Employee Added!")
+            askForAction();
+        })
+    })
+
+}
+
+function updateRoles() {
+    console.log("Role Updated!");
     askForAction();
 }
 
