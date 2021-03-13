@@ -1,7 +1,9 @@
 const { createPromptModule } = require("inquirer");
 const inquirer = require("inquirer");
 const db = require("./db");
-const connection = require("./db/connection")
+const connection = require("./db/connection");
+
+
 
 
 function askForAction() {
@@ -63,7 +65,7 @@ function askForAction() {
 function viewDepartments() {
 
     // Must Promisify connection.query in connection and index.js needs to return connection.query in module.exports
-    db.getDepartments.then((results) => {
+    db.getDepartments().then((results) => {
         console.table(results);
         askForAction();
     });
@@ -72,9 +74,9 @@ function viewDepartments() {
 
 function createRole() {
 
-    db.getDepartments().then((departments) => {
+    db.getDepartments().then((department) => {
 
-        const departmentChoices = departments.map((department) => ({
+        const departmentChoices = department.map((department) => ({
             value: department.id,
             name: department.name
         }))

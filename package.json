@@ -4,7 +4,8 @@
   "description": "Unit 12 MySQL Assignment. UW Coding Boot Camp.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "seed": "node db/seed.sql"
   },
   "repository": {
     "type": "git",
