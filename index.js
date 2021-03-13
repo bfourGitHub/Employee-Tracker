@@ -4,7 +4,16 @@ const db = require("./db");
 const connection = require("./db/connection");
 
 
+function init() {
+    lineBreak();
+    console.log("Welcome to your Employee Managment System!");
+    console.log("Here you can CREATE, VIEW and UPDATE employee information.");
+    lineBreak();
 
+    askForAction();
+}
+
+init();
 
 function askForAction() {
     inquirer
@@ -17,9 +26,9 @@ function askForAction() {
                 "VIEW_ROLES",
                 "VIEW_EMPLOYEES",
                 "CREATE_ROLE",
-                "ADD_DEPARTMENTS",
-                "ADD_ROLES",
+                "CREATE_DEPARTMENT",
                 "ADD_EMPLOYEES",
+                "UPDATE_ROLES",
                 "QUIT"
             ]
         })
@@ -39,20 +48,20 @@ function askForAction() {
                     viewEmployees();
                     break;
 
-                case "ADD_DEPARTMENTS":
+                case "CREATE_ROLE":
+                    createRole();
+                    break;
+
+                case "CREATE_DEPARTMENT":
                     addDepartment();
                     break;
-    
-                case "ADD_ROLES":
-                    addRoles();
-                    break;
-    
+
                 case "ADD_EMPLOYEES":
                     addEmployees();
                     break;
 
-                case "CREATE_ROLE":
-                    createRole();
+                case "UPDATE_ROLES":
+                    addRoles();
                     break;
 
                 default:
@@ -72,6 +81,24 @@ function viewDepartments() {
 
 }
 
+function viewEmployees() {
+
+    db.getEmployees().then((results) => {
+        console.table(results);
+        askForAction();
+    });
+
+}
+
+function viewRoles() {
+
+    db.getRoles().then((results) => {
+        console.table(results);
+        askForAction();
+    });
+
+}
+
 function createRole() {
 
     db.getDepartments().then((department) => {
@@ -80,6 +107,11 @@ function createRole() {
             value: department.id,
             name: department.name
         }))
+        // const roleChoices = role.map((role) => ({
+        //     value: role.id,
+        //     name: role.title
+        // }))
+
 
         inquirer.prompt([
             {
@@ -87,14 +119,29 @@ function createRole() {
                 type: "list",
                 name: "department_id",
                 choices: departmentChoices
+            },
+            {
+                message: "What ROLE would you like to add?",
+                name: "title",
+                type: "input"              
+            },
+            {
+                message: "What SALARY would you like to assign to this new role?",
+                name: "salary",
+                type: "input"              
             }
+           
         ]).then(res => {
 
-            console.log(res);
-
+            db.insertRole(res);
+            console.log("New Role Added!");
+            viewRoles();
+            askForAction();
+            
         })
-
+        
     })
+    
 
 }
 
@@ -113,23 +160,6 @@ function addEmployees() {
     askForAction();
 }
 
-function viewEmployees() {
-    
-    db.getEmployees().then((results) => {
-        console.table(results);
-        askForAction();
-    });
-
-}
-
-function viewRoles() {
-
-    db.getRoles().then((results) => {
-        console.table(results);
-        askForAction();
-    });
-    
-}
-
-askForAction();
-
+function lineBreak() {
+    console.log(`=============================================================`);
+};

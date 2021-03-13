@@ -15,7 +15,7 @@ values
 ("Lead Engineer", 145000, 2),
 ("Engineer", 90000, 2),
 ("Director, Human Resources", 100000, 3),
-("Human Resources Analyst" 65000, 3),
+("Human Resources Analyst", 65000, 3),
 ("Director, Accounting", 120000, 4),
 ("Accountant", 75000, 4);
 
@@ -27,7 +27,7 @@ values
 ("Brooke", "Davis", 3, 1),
 ("Lillian", "Hancock", 4, null),
 ("Emma", "Densmore", 5, 4),
-("Samantha", "Abernathy", 6, null)
+("Samantha", "Abernathy", 6, null),
 ("Mary", "Crawley", 7, 6),
 ("Tom", "Branson", 8, null),
 ("Niles", "Crane", 9, 8),

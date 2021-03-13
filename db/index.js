@@ -19,7 +19,12 @@ module.exports = {
     },
     insertRole( data ) {
 
-        return connection.query ( "INSERT INTO role ?", data );
+        return connection.query ( "INSERT INTO role SET ?", 
+        {
+            department_id: data.department_id,
+            title: data.title,
+            salary: data.salary
+        });
 
     }
 } 
