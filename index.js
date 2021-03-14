@@ -134,9 +134,8 @@ function createRole() {
         ]).then(res => {
 
             db.insertRole(res);
-            viewRoles();
             console.log("New Role Added!");
-            askForAction();
+            viewRoles();
             
         })
         
@@ -158,9 +157,9 @@ function createDepartment() {
     ]).then(res => {
 
         db.insertDepartment(res);
-        viewDepartments();
         console.log("New Department Added!")
-        askForAction();
+        viewDepartments();
+        
     })
 
 }
@@ -174,43 +173,47 @@ function addEmployees() {
             value: role.id,
             name: role.title
         }))
-        
-        inquirer.prompt([
+
+        db.getEmployees().then((employee) => {
+
+            const employeeChoices = employee.map((employee) => ({
+                value: employee.id,
+                name: employee.first_name + " " + employee.last_name
+            }))
             
-            {
-                message: "What is the new employee's FIRST NAME?",
-                name: "first_name",
-                type: "input"
-            },
-            {
-                message: "What is the new employee's LAST NAME?",
-                name: "last_name",
-                type: "input"
-            },
-            {
-                message: "What ROLE is being assigned to this employee?",
-                name: "role_id",
-                type: "list",
-                choices: roleChoices
-            },
-            {
-                message: "Which MANAGER is being assigned to this employee? (Please select the manager's ID number. Select NULL if this is a management position)",
-                name: "manager_id",
-                type: "list",
-                choices: [
-                    "1",
-                    "4",
-                    "6",
-                    "8"
-                ]
-            },
-            
-        ]).then(res => {
-            
-            db.insertEmployee(res);
-            viewEmployees();
-            console.log("New Employee Added!")
-            askForAction();
+            inquirer.prompt([
+                
+                {
+                    message: "What is the new employee's FIRST NAME?",
+                    name: "first_name",
+                    type: "input"
+                },
+                {
+                    message: "What is the new employee's LAST NAME?",
+                    name: "last_name",
+                    type: "input"
+                },
+                {
+                    message: "Which employee is being assigned as a MANAGER to this employee? (Please select the manager's ID number.)",
+                    name: "manager_id",
+                    type: "list",
+                    choices: employeeChoices
+                    
+                },
+                {
+                    message: "What ROLE is being assigned to this employee?",
+                    name: "role_id",
+                    type: "list",
+                    choices: roleChoices
+                }
+                
+            ]).then(res => {
+                
+                db.insertEmployee(res);
+                console.log("New Employee Added!");
+                viewEmployees();
+                
+            })
         })
     })
 
