@@ -57,5 +57,29 @@ module.exports = {
                     id: data.id
                 }
             ]);
+    },
+    deleteDepartments(data) {
+
+        return connection.query("DELETE FROM department WHERE ?",
+        {
+            id: data.id
+        });
+
+    },
+    deleteRoles(data) {
+
+        return connection.query("DELETE FROM role WHERE ?",
+        {
+            id: data.id
+        });
+
+    },
+    deleteEmployees(data) {
+
+        return connection.query("DELETE FROM employee WHERE ?",
+        {
+            id: data.id
+        });
+
     }
 }

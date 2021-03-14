@@ -6,8 +6,11 @@ const connection = require("./db/connection");
 
 function init() {
     lineBreak();
-    console.log("Welcome to your Employee Managment System!");
-    console.log("Here you can CREATE, VIEW and UPDATE employee information.");
+    console.log("");
+    console.log("   Welcome to your Employee Managment System!");
+    console.log("");
+    console.log("   Here you can CREATE, VIEW and UPDATE employee information.");
+    console.log("");
     lineBreak();
 
     askForAction();
@@ -25,10 +28,13 @@ function askForAction() {
                 "VIEW_DEPARTMENTS",
                 "VIEW_ROLES",
                 "VIEW_EMPLOYEES",
-                "CREATE_ROLE",
                 "CREATE_DEPARTMENT",
+                "CREATE_ROLE",
                 "ADD_EMPLOYEES",
                 "UPDATE_ROLES",
+                "DELETE_EMPLOYEES",
+                "DELETE_ROLES",
+                "DELETE_DEPARTMENTS",
                 "QUIT"
             ]
         })
@@ -64,6 +70,18 @@ function askForAction() {
                     updateRoles();
                     break;
 
+                case "DELETE_DEPARTMENTS":
+                    deleteDepartments();
+                    break;
+
+                case "DELETE_ROLES":
+                    deleteRoles();
+                    break;
+
+                case "DELETE_EMPLOYEES":
+                    deleteEmployees();
+                    break;
+
                 default:
                     connection.end();
 
@@ -81,6 +99,15 @@ function viewDepartments() {
 
 }
 
+function viewRoles() {
+
+    db.getRoles().then((results) => {
+        console.table(results);
+        askForAction();
+    });
+
+}
+
 function viewEmployees() {
 
     db.getEmployees().then((results) => {
@@ -90,12 +117,23 @@ function viewEmployees() {
 
 }
 
-function viewRoles() {
+function createDepartment() {
 
-    db.getRoles().then((results) => {
-        console.table(results);
-        askForAction();
-    });
+    inquirer.prompt([
+
+        {
+            message: "What Department would you like to add?",
+            name: "name",
+            type: "input"
+        }
+
+    ]).then(res => {
+
+        db.insertDepartment(res);
+        console.log("New Department Added!")
+        viewDepartments();
+
+    })
 
 }
 
@@ -121,7 +159,7 @@ function createRole() {
                 type: "input"
             },
             {
-                message: "What SALARY would you like to assign to this new role?",
+                message: "What SALARY would you like to assign to this new role? (Please only enter NUMBERS.)",
                 name: "salary",
                 type: "input"
             }
@@ -136,29 +174,7 @@ function createRole() {
 
     })
 
-
 }
-
-function createDepartment() {
-
-    inquirer.prompt([
-
-        {
-            message: "What Department would you like to add?",
-            name: "name",
-            type: "input"
-        }
-
-    ]).then(res => {
-
-        db.insertDepartment(res);
-        console.log("New Department Added!")
-        viewDepartments();
-
-    })
-
-}
-
 
 function addEmployees() {
 
@@ -195,7 +211,7 @@ function addEmployees() {
                     choices: roleChoices
                 },
                 {
-                    message: "Which employee is being assigned as a MANAGER to this employee? (Please select the manager's ID number.)",
+                    message: "Which employee is being assigned as a MANAGER to this employee?",
                     name: "manager_id",
                     type: "list",
                     choices: employeeChoices
@@ -214,7 +230,7 @@ function addEmployees() {
 }
 
 function updateRoles() {
-    
+
     db.getRoles().then((role) => {
 
         const roleChoices = role.map((role) => ({
@@ -241,7 +257,7 @@ function updateRoles() {
                     message: "What is the employee's new ROLE?",
                     name: "role_id",
                     type: "list",
-                    choices: roleChoices            
+                    choices: roleChoices
                 }
 
             ]).then(res => {
@@ -256,6 +272,92 @@ function updateRoles() {
 
 }
 
+function deleteDepartments() {
+
+    db.getDepartments().then((department) => {
+
+        const departmentChoices = department.map((department) => ({
+            value: department.id,
+            name: department.name
+        }))
+
+        inquirer.prompt([
+
+            {
+                message: "Which DEPARTMENT would you like to DELETE?",
+                name: "id",
+                type: "list",
+                choices: departmentChoices
+            }
+
+        ]).then(res => {
+
+            db.deleteDepartments(res);
+            console.log("Department Deleted!");
+            viewDepartments();
+
+        })
+    })
+}
+
+function deleteRoles() {
+
+    db.getRoles().then((role) => {
+
+        const roleChoices = role.map((role) => ({
+            value: role.id,
+            name: role.title
+        }))
+
+        inquirer.prompt([
+
+            {
+                message: "Which ROLE would you like to DELETE?",
+                name: "id",
+                type: "list",
+                choices: roleChoices
+            }
+
+        ]).then(res => {
+
+            db.deleteRoles(res);
+            console.log("Role Deleted!");
+            viewRoles();
+
+        })
+    })
+}
+
+function deleteEmployees() {
+
+    db.getEmployees().then((employee) => {
+
+        const employeeChoices = employee.map((employee) => ({
+            value: employee.id,
+            name: employee.first_name + " " + employee.last_name
+        }))
+
+        inquirer.prompt([
+
+            {
+                message: "Which EMPLOYEE would you like to DELETE?",
+                name: "id",
+                type: "list",
+                choices: employeeChoices
+            }
+
+        ]).then(res => {
+
+            db.deleteEmployees(res);
+            console.log("Employee Deleted!");
+            viewEmployees();
+
+        })
+    })
+}
+
 function lineBreak() {
-    console.log(`=============================================================`);
+
+    console.log(`================================================================`);
+
 };
