@@ -48,12 +48,12 @@ function askForAction() {
                     viewEmployees();
                     break;
 
-                case "CREATE_ROLE":
-                    createRole();
-                    break;
-
                 case "CREATE_DEPARTMENT":
                     createDepartment();
+                    break;
+
+                case "CREATE_ROLE":
+                    createRole();
                     break;
 
                 case "ADD_EMPLOYEES":
@@ -107,11 +107,6 @@ function createRole() {
             value: department.id,
             name: department.name
         }))
-        // const roleChoices = role.map((role) => ({
-        //     value: role.id,
-        //     name: role.title
-        // }))
-
 
         inquirer.prompt([
             {
@@ -123,29 +118,29 @@ function createRole() {
             {
                 message: "What ROLE would you like to add?",
                 name: "title",
-                type: "input"              
+                type: "input"
             },
             {
                 message: "What SALARY would you like to assign to this new role?",
                 name: "salary",
-                type: "input"              
+                type: "input"
             }
-           
+
         ]).then(res => {
 
             db.insertRole(res);
             console.log("New Role Added!");
             viewRoles();
-            
+
         })
-        
+
     })
-    
+
 
 }
 
 function createDepartment() {
-    
+
     inquirer.prompt([
 
         {
@@ -159,7 +154,7 @@ function createDepartment() {
         db.insertDepartment(res);
         console.log("New Department Added!")
         viewDepartments();
-        
+
     })
 
 }
@@ -180,9 +175,9 @@ function addEmployees() {
                 value: employee.id,
                 name: employee.first_name + " " + employee.last_name
             }))
-            
+
             inquirer.prompt([
-                
+
                 {
                     message: "What is the new employee's FIRST NAME?",
                     name: "first_name",
@@ -194,25 +189,24 @@ function addEmployees() {
                     type: "input"
                 },
                 {
-                    message: "Which employee is being assigned as a MANAGER to this employee? (Please select the manager's ID number.)",
-                    name: "manager_id",
-                    type: "list",
-                    choices: employeeChoices
-                    
-                },
-                {
                     message: "What ROLE is being assigned to this employee?",
                     name: "role_id",
                     type: "list",
                     choices: roleChoices
+                },
+                {
+                    message: "Which employee is being assigned as a MANAGER to this employee? (Please select the manager's ID number.)",
+                    name: "manager_id",
+                    type: "list",
+                    choices: employeeChoices
                 }
-                
+
             ]).then(res => {
-                
+
                 db.insertEmployee(res);
                 console.log("New Employee Added!");
                 viewEmployees();
-                
+
             })
         })
     })
@@ -220,8 +214,46 @@ function addEmployees() {
 }
 
 function updateRoles() {
-    console.log("Role Updated!");
-    askForAction();
+    
+    db.getRoles().then((role) => {
+
+        const roleChoices = role.map((role) => ({
+            value: role.id,
+            name: role.title
+        }))
+
+        db.getEmployees().then((employee) => {
+
+            const employeeChoices = employee.map((employee) => ({
+                value: employee.id,
+                name: employee.first_name + " " + employee.last_name
+            }))
+
+            inquirer.prompt([
+
+                {
+                    message: "Which EMPLOYEE'S role would you like to UPDATE?",
+                    name: "id",
+                    type: "list",
+                    choices: employeeChoices
+                },
+                {
+                    message: "What is the employee's new ROLE?",
+                    name: "role_id",
+                    type: "list",
+                    choices: roleChoices            
+                }
+
+            ]).then(res => {
+
+                db.updateEmpRole(res);
+                console.log("Employee Role Updated!");
+                viewEmployees();
+
+            })
+        })
+    })
+
 }
 
 function lineBreak() {

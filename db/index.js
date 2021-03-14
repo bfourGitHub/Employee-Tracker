@@ -1,50 +1,61 @@
 const connection = require("./connection");
 
 module.exports = {
-    
+
     getDepartments() {
 
-        return connection.query( "SELECT * FROM department" );
+        return connection.query("SELECT * FROM department");
 
     },
     getRoles() {
 
-        return connection.query( "SELECT * FROM role" );
+        return connection.query("SELECT * FROM role");
 
     },
     getEmployees() {
 
-        return connection.query( "SELECT * FROM employee" );
+        return connection.query("SELECT * FROM employee");
 
     },
-    insertDepartment( data ) {
+    insertDepartment(data) {
 
-        return connection.query ( "INSERT INTO department SET ?", 
-        {
-            name: data.name
-        });
-
-    },
-    insertRole( data ) {
-
-        return connection.query ( "INSERT INTO role SET ?", 
-        {
-            department_id: data.department_id,
-            title: data.title,
-            salary: data.salary
-        });
+        return connection.query("INSERT INTO department SET ?",
+            {
+                name: data.name
+            });
 
     },
-    insertEmployee( data ) {
+    insertRole(data) {
 
-        return connection.query ( "INSERT INTO employee SET ?", 
-        {
-            first_name: data.first_name,
-            last_name: data.last_name,
-            role_id: data.role_id,
-            manager_id: data.manager_id
-            
-        });
+        return connection.query("INSERT INTO role SET ?",
+            {
+                department_id: data.department_id,
+                title: data.title,
+                salary: data.salary
+            });
 
+    },
+    insertEmployee(data) {
+
+        return connection.query("INSERT INTO employee SET ?",
+            {
+                first_name: data.first_name,
+                last_name: data.last_name,
+                role_id: data.role_id,
+                manager_id: data.manager_id
+
+            });
+
+    },
+    updateEmpRole(data) {
+        return connection.query("UPDATE employee SET ? WHERE ?",
+            [
+                {
+                    role_id: data.role_id
+                },
+                {
+                    id: data.id
+                }
+            ]);
     }
-} 
+}
