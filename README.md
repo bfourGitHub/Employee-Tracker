@@ -39,7 +39,16 @@ The command-line application should allow users to:
   * Delete departments, roles, and employees
 
 
-EMPLOYEE TRACKER [DEMO]( INSERT GOOGLE DRIVE VIDEO )
+EMPLOYEE TRACKER [DEMO](https://drive.google.com/file/d/1CRmVvvu1VjVCvzb3Ojdp_MRwQQmD0urU/view)
+
+This video demo walks thru every function of the employee tracker.
+It begins with the VIEW functions. (Departments, roles, employees)
+It then goes thru the CREATE functions. 
+The Update Roles function then updates the role of one employee.
+The last functionality covered is deletions of employees, roles and departments.
+
+
+
 
 
 ## Questions
